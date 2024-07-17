@@ -55,3 +55,7 @@ public class Board extends Timestamped {
     }
 
 }
+
+
+// entity는 데이터베이스 테이블이랑 완전히 똑같
+// dto는 일부 정보만 사용

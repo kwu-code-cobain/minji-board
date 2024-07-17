@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
     자동으로 관리하는 Timesstamped 추상 클래스를 정의한다
     JPA의 Auditing 기능을 사용하여 엔티티가 생성되거나 수정될때 자동으로 기록한다
  */
+
 @Getter
 @MappedSuperclass  // 이 클래스가 다른 엔티티 클래스의 부모가 될 수 있음을 나타냄
 @EntityListeners(AuditingEntityListener.class)  // Auditing 기능을 추가함
@@ -28,3 +29,5 @@ public abstract class Timestamped {
     @Temporal(TemporalType.TIMESTAMP)  // 이 필드가 타임스태프임을 나타냄
     private LocalDateTime modifiedAt;
 }
+
+// 굳이 안 나눠도 된다

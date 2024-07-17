@@ -5,22 +5,16 @@ import com.cake.board1.dto.BoardResponseDto;
 import com.cake.board1.entity.Board;
 import com.cake.board1.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.*;
 import java.util.List;
 
 /*
   데이터베이스와의 상호작용을 담당하고 주로 비즈니스 로직을 처리한다
  */
-
+@Transactional
 @Service  // 서비스 클래스임을 선언
 @RequiredArgsConstructor  // 필수 생성자 주입 자동으로 처리
 public class BoardService {
@@ -31,9 +25,13 @@ public class BoardService {
     // 1. 게시글 생성
     public BoardResponseDto createBoard(BoardRequestDto requestDto){
         String password= passwordEncoder.encode(requestDto.getPassword());
-        // 비밀번호를 암호화하여 저장함
+        // getPassword로 비밀번호 가져오고, 비밀번호를 암호화하여 저장함
 
-        // RequestDto -> Entity 변환
+        // RequestDto -> Entity 변환 과정
+        // 1. Board 클래스의 생성자에 BoardRequestDto를 전달하여 새로운 Board 엔티티를 생성
+        // 2. 생성된 Board 엔티티는 Board 클래스에서 정의된 다양한 필드들을 초기화
+        // 3. 생성된 Board 엔티티의 비밀번호 필드를 암호화된 비밀번호로 설정
+
         Board board = new Board(requestDto);
         board.setPassword(password);  // 암호화된 비밀번호 저장
         Board saveBoard = boardRepository.save(board); // 데이터베이스에 저장
@@ -47,7 +45,7 @@ public class BoardService {
         return boardRepository.findAllByOrderByModifiedAtDesc()
                 // 데이터베이스에 모든 게시글을 수정시간 기준 내림차순을 조회하여
                 // ResponseDto 리스트로 변환해서 반환
-                .stream()
+                .stream() // ??  알아보기
                 .map(BoardResponseDto::new)
                 .toList();
     }
@@ -55,8 +53,7 @@ public class BoardService {
     // 3. 게시글 선택 조회
     public BoardResponseDto getBoardById(Long id) {
         // 주어진 id로 게시글 찾아서 ResponseDto로 변환
-        Board board = findBoard(id);
-        return new BoardResponseDto(board);
+        return new BoardResponseDto(findBoard(id)); //수정......
 
     }
 
@@ -68,7 +65,7 @@ public class BoardService {
         Isolation: 트랜잭션 수행시 다른 트랜잭션의 작업이 끼어들지 못함
         Durability: 성공적으로 수행된 트랜잭션은 영원히 반영되어야함
      */
-    @Transactional
+
     public Long updateBoard(Long id, BoardRequestDto requestDto) {
         String password = requestDto.getPassword(); // 요청에서 받은 비밀번호
         Board board = findBoard(id);  // 주어진 id로 게시글 조회
@@ -81,12 +78,14 @@ public class BoardService {
         return id;
     }
 
-    // 5. 게시글 삭제
-    public String deleteMemo(Long id, BoardRequestDto requestDto) {
-        String password = requestDto.getPassword(); // 요청에서 받은 비밀번호
-        Board board = findBoard(id);  // 주어진 id로 게시글 조회
 
-        // 비밀번호 검증
+    // 5. 게시글 삭제
+    // 수정하기
+    public String deleteMemo(Long id, BoardRequestDto requestDto) {
+        // 해당 메모가 DB에 존재하는지 확인
+        String password = requestDto.getPassword();
+        Board board = findBoard(id);
+
         if(!passwordEncoder.matches(password, board.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
         }
@@ -94,6 +93,8 @@ public class BoardService {
         boardRepository.delete(board);
         return "게시글 삭제 완료";
     }
+
+
 
 
 
