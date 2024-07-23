@@ -1,4 +1,4 @@
-package com.cake.board1.entity;
+package com.cake.board1.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

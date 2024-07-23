@@ -1,4 +1,4 @@
-package com.cake.board1.entity;
+package com.cake.board1.domain;
 
 import com.cake.board1.dto.BoardRequestDto;
 import jakarta.persistence.*;
@@ -24,38 +24,35 @@ public class Board extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키의 값을 자동으로 생성하도록 설정
     private Long id;
 
-    @Column(nullable = false)  // 이 필드가 데이터베이스의 not null 컬럼임을 나타냄
-    private String username;
+    @Column(name="name",nullable = false)  // 이 필드가 데이터베이스의 not null 컬럼임을 나타냄
+    private String name;
 
-    @Column(nullable = false)
+    @Column(name= "title",nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name= "contents",nullable = false)
     private String contents;
 
-    @Column(nullable = false)
+    @Column(name= "password",nullable = false)
     private String password;
 
 
     // dto 객체를 받아서 엔티티를 생성하는 생성자
     public Board(BoardRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        // dto에서 사용자 이름을 가져와 엔티티에 설정
+        this.name = requestDto.getName();
         this.title = requestDto.getTitle();
         this.contents = requestDto.getTitle();
         this.password = requestDto.getPassword();
+
     }
 
 
     // dto 객체를 받아서 엔티티의 필드를 업데이트하는 메서드
     public void update(BoardRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+        this.name = requestDto.getName();
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 
 }
 
-
-// entity는 데이터베이스 테이블이랑 완전히 똑같
-// dto는 일부 정보만 사용
