@@ -13,7 +13,7 @@ import java.util.List;
   특히 서버에서 클라이언트로 데이터를 전달할 때 사용된다.
  */
 
-@Getter @Setter
+@Getter
 public class BoardResponseDto {
     private Long id;
     private String name;
