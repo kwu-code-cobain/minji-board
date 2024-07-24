@@ -13,7 +13,7 @@ public class BoardResponseDto {
     private String name;
     private String title;
     private String contents;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
     //Board 엔티티 객체를 받아서, 해당 엔티티의 데이터를 'BoardResponseDto' 객체에 설정
@@ -22,7 +22,7 @@ public class BoardResponseDto {
         this.name= board.getName();
         this.title= board.getTitle();
         this.contents= board.getContents();
-        this.createAt= board.getCreatedAt();
+        this.createdAt= board.getCreatedAt();
         this.modifiedAt= board.getModifiedAt();
     }
 
@@ -31,7 +31,7 @@ public class BoardResponseDto {
         this.title = board.get(0).getTitle();
         this.name = board.get(0).getName();
         this.contents = board.get(0).getContents();
-        this.createAt = board.get(0).getCreatedAt();
+        this.createdAt = board.get(0).getCreatedAt();
         this.modifiedAt = board.get(0).getModifiedAt();
     }
 
