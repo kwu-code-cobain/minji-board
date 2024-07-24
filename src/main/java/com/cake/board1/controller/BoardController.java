@@ -49,15 +49,15 @@ public class BoardController {
     // 게시글 조회 - 특정 이름
     @GetMapping(value ="/boards", params = "name")
     public ResponseEntity<List<BoardResponseDto>> getBoardByName(@PathVariable String name) {
-        List<BoardResponseDto> responseDto = boardService.getBoardByName(name);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        List<BoardResponseDto> responseDtoList = boardService.getBoardByName(name);
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
     // 게시글 조회 - 특정 제목
     @GetMapping(value ="/boards", params = "title")
     public ResponseEntity<List<BoardResponseDto>> getBoardByTitle(@PathVariable String title) {
-        List<BoardResponseDto> responseDto = boardService.getBoardByName(title);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        List<BoardResponseDto> responseDtoList = boardService.getBoardByTitle(title);
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
     // 게시글 수정
